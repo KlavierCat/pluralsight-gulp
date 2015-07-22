@@ -23,7 +23,7 @@ gulp.task('vet', function() {
         .pipe($.jshint.reporter('fail'));
 });
 
-gulp.task('styles', function() {
+gulp.task('styles', ['clean-styles'], function() {
     log('Compiling less --> css');
 
     return gulp
@@ -33,10 +33,21 @@ gulp.task('styles', function() {
         .pipe(gulp.dest(config.temp));
 });
 
-gulp.task('clean-styles', function() {
+gulp.task('clean-styles', function(done) {// done is a callback
     var files = config.temp + '**/*.css';
-    del(files);
+    clean(files, done);
 });
+
+gulp.task('less-watcher', function() {
+    gulp.watch([config.less], ['styles']);
+})
+
+////////////
+
+function clean(path, done) {
+    log('Cleaning: ' + $.util.colors.blue(path));
+    del(path, done);
+}
 
 function log(msg) {
     if (typeof(msg) === 'object') {
