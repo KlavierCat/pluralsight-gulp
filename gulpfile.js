@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var args = require('yargs').argv;// enable passing argument in the command line
+var config = require('./gulpconfig')();// the () runs it; ./ indicates it is a local file, not a package
 
 var $ = require('gulp-load-plugins')({lazy: true});// load plugins as is needed
 
@@ -12,10 +13,7 @@ var $ = require('gulp-load-plugins')({lazy: true});// load plugins as is needed
 gulp.task('vet', function() {
     log('Analyzing source with JSHint and JSCS');
     return gulp
-        .src([// pipe in all the source we'll be using
-            './src/**/*.js',
-            './*.js'
-        ])
+        .src(config.alljs)
         .pipe($.if(args.verbose, $.print()))
         .pipe($.jscs())
         .pipe($.jshint())
