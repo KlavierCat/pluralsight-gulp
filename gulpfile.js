@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var args = require('yargs').argv;// enable passing argument in the command line
 var config = require('./gulpconfig')();// the () runs it; ./ indicates it is a local file, not a package
+var del = require('del');
 
 var $ = require('gulp-load-plugins')({lazy: true});// load plugins as is needed
 
@@ -30,6 +31,11 @@ gulp.task('styles', function() {
         .pipe($.less())
         .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
         .pipe(gulp.dest(config.temp));
+});
+
+gulp.task('clean-styles', function() {
+    var files = config.temp + '**/*.css';
+    del(files);
 });
 
 function log(msg) {
